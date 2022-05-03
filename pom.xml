@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>climb-edu-common</module>
+        <module>climb-edu-service</module>
+    </modules>
+
+    <parent>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>2.6.6</version>
+<!--        查找顺序：relativePath元素中的地址==>本地仓库==>远程仓库-->
+<!--        设定一个空值将始终从仓库中获取，不从本地路径获取-->
+        <relativePath />
+    </parent>
+
+<!--    <groupId>com.lsz</groupId>-->
+<!--    <artifactId>climb-edu</artifactId>-->
+<!--    <version>1.0-SNAPSHOT</version>-->
+
+    <groupId>com.rimi.edu</groupId>
+    <artifactId>test-climb-edu</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+<!--    统一依赖版本-->
+    <properties>
+<!--        <maven.compiler.source>11</maven.compiler.source>-->
+<!--        <maven.compiler.target>11</maven.compiler.target>-->
+        <java.version>11</java.version>
+        <spring-boot.version>2.6.6</spring-boot.version>
+        <spring-boot.admin.version>2.6.6</spring-boot.admin.version>
+        <druid.spring.version>1.2.8</druid.spring.version>
+        <mybatis.plus.version>3.5.1</mybatis.plus.version>
+        <maven.resources.plugin.version>3.2.0</maven.resources.plugin.version>
+    </properties>
+
+<!--    统一管理依赖-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+<!--                应用监控客户端-->
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot.admin.version}</version>
+            </dependency>
+<!--            druid数据库连接池-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.spring.version}</version>
+            </dependency>
+<!--            mybatis-plus-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis.plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <finalName>${project.name}</finalName>
+<!--        统一管理maven插件-->
+        <pluginManagement>
+            <plugins>
+<!--                没有这个插件配置文件中的特殊符号无法识别比如 @ -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven.resources.plugin.version}</version>
+                    <configuration>
+                        <delimiters>
+                            <delimiter>@</delimiter>
+                        </delimiters>
+                        <useDefaultDelimiters>false</useDefaultDelimiters>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <configuration>
+<!--                        如果设置就会按照你自己设定的名字作为包名-->
+                        <finalName>${project.build.finalName}</finalName>
+                        <layers>
+<!--                            分一层jar包为了方便和Docker配合使用-->
+                            <enabled>true</enabled>
+                        </layers>
+<!--                        spring-boot:run解决控制台中文乱码问题-->
+                        <jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
